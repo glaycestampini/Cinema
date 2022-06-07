@@ -1,42 +1,39 @@
 
-package Classes;
+package classes;
 
 public class Venda {
     
-    Filme objFilme = new Filme();
-    
-    
-    
-    //atributos
-    private int id_venda;
-    private int id_filme = objFilme.getId_filme();
+    private int idVenda;
     private int ingresso;
-    private double preço;
-    private double Total;
+    private double preco;
+    private double total;
+    private String dataVenda;
+    private Sessao sessao;
 
-    //Construtor
+    public Venda(int idVenda, int ingresso, double preco, double total, String dataVenda, Sessao sessao) {
+        this.idVenda = idVenda;
+        this.ingresso = ingresso;
+        this.preco = preco;
+        this.total = total;
+        this.dataVenda = dataVenda;
+        this.sessao = sessao;
+    }
 
     public Venda() {
     }
-    
-    
-    
-   //GET E SET 
 
-    public int getId_venda() {
-        return id_venda;
+    public Venda(Sessao sessao) {
+        this.sessao = sessao;
     }
 
-    public void setId_venda(int id_venda) {
-        this.id_venda = id_venda;
+
+
+    public int getIdVenda() {
+        return idVenda;
     }
 
-    public int getId_filme() {
-        return id_filme;
-    }
-
-    public void setId_filme(int id_filme) {
-        this.id_filme = id_filme;
+    public void setIdVenda(int idVenda) {
+        this.idVenda = idVenda;
     }
 
     public int getIngresso() {
@@ -47,28 +44,38 @@ public class Venda {
         this.ingresso = ingresso;
     }
 
-    public double getPreço() {
-        return preço;
+    public double getPreco() {
+        return preco;
     }
 
-    public void setPreço(double preço) {
-        this.preço = preço;
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 
     public double getTotal() {
-        return Total;
+        return total;
     }
 
-    public void setTotal(double Total) {
-        this.Total = Total;
+    public void setTotal(double total) {
+        this.total = total;
     }
 
- 
+    public String getDataVenda() {
+        return dataVenda;
+    }
 
-   
+    public void setDataVenda(String dataVenda) {
+        this.dataVenda = dataVenda;
+    }
 
+    public Sessao getSessao() {
+        return sessao;
+    }
+
+    public void setSessao(Sessao sessao) {
+        this.sessao = sessao;
+    }
     
-    
-    
+
     
 }
