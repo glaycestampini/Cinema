@@ -1,6 +1,6 @@
 package DAO;
 
-import Classes.Usuario;
+import classes.Usuario;
 import java.sql.ResultSet;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
@@ -10,21 +10,23 @@ import java.util.ArrayList;
 
 public class UsuarioDAO {
 
-    ConectarDAO objConectarDAO = new ConectarDAO();
-    Connection conectar = objConectarDAO.ConectarBD();
-
-    PreparedStatement preparo = null;
-    ResultSet rst = null;
-
     public ResultSet autenticarUsuario(Usuario objUsuario) {
         try {
+            Connection conn = ConectarDAO.ConectarBD();
 
-            String sql = "Select * from usuario where LOGIN_USUARIO =? AND SENHA_USUARIO=?";
-            preparo = conectar.prepareStatement(sql);
-            preparo.setString(1, objUsuario.getLogin());
-            preparo.setString(2, objUsuario.getSenha());
+            String sql = "Select * from usuario where login_usuario = ? and senha_usuario = ?";
 
-            rst = preparo.executeQuery();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+
+            pstm.setString(1, objUsuario.getLogin());
+            pstm.setString(2, objUsuario.getSenha());
+
+            ResultSet rs = pstm.executeQuery();
+
+            Usuario user = new Usuario();
+            while(rs.next()) {
+                
+            }   
             return rst;
 
         } catch (SQLException erro) {
