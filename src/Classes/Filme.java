@@ -1,72 +1,92 @@
 
-package Classes;
+package classes;
+
 
 public class Filme {
     
     //ATRIBUTO 
-    private int id_filme;
-    private String nome_filme;
-    private String categoria_filme;
-    private String classificaçao_filme;
-    private String sala_filme;
-    private String sessao_filme;
+    private int idFilme;
+    private String nomeFilme;
+    private String categoriaFilme;
+    private String classificacaoFilme;
+    private int duracaoFilme;
+    private String dataFilme;
+    private Double valorIngresso;
 
-    //CONSTRUTOR 
+    public Filme(int idFilme, String nomeFilme, String categoriaFilme, String classificacaoFilme, int duracaoFilme, String dataFilme, Double valorIngresso) {
+        this.idFilme = idFilme;
+        this.nomeFilme = nomeFilme;
+        this.categoriaFilme = categoriaFilme;
+        this.classificacaoFilme = classificacaoFilme;
+        this.duracaoFilme = duracaoFilme;
+        this.dataFilme = dataFilme;
+        this.valorIngresso = valorIngresso;
+    }
 
     public Filme() {
     }
-    
-    
-    //GET E SET 
 
-    public int getId_filme() {
-        return id_filme;
+    public Filme(int id_filme) {
     }
 
-    public void setId_filme(int id_filme) {
-        this.id_filme = id_filme;
+    public Double getValorIngresso() {
+        return valorIngresso;
     }
 
-    public String getNome_filme() {
-        return nome_filme;
+    public void setValorIngresso(Double valorIngresso) {
+        this.valorIngresso = valorIngresso;
     }
 
-    public void setNome_filme(String nome_filme) {
-        this.nome_filme = nome_filme;
+
+    public int getIdFilme() {
+        return idFilme;
     }
 
-    public String getCategoria_filme() {
-        return categoria_filme;
+    public void setIdFilme(int idFilme) {
+        this.idFilme = idFilme;
     }
 
-    public void setCategoria_filme(String categoria_filme) {
-        this.categoria_filme = categoria_filme;
+    public String getNomeFilme() {
+        return nomeFilme;
     }
 
-    public String getClassificaçao_filme() {
-        return classificaçao_filme;
+    public void setNomeFilme(String nomeFilme) {
+        this.nomeFilme = nomeFilme;
     }
 
-    public void setClassificaçao_filme(String classificaçao_filme) {
-        this.classificaçao_filme = classificaçao_filme;
+    public String getCategoriaFilme() {
+        return categoriaFilme;
     }
 
-    public String getSala_filme() {
-        return sala_filme;
+    public void setCategoriaFilme(String categoriaFilme) {
+        this.categoriaFilme = categoriaFilme;
     }
 
-    public void setSala_filme(String sala_filme) {
-        this.sala_filme = sala_filme;
+    public String getClassificacaoFilme() {
+        return classificacaoFilme;
     }
 
-    public String getSessao_filme() {
-        return sessao_filme;
+    public void setClassificacaoFilme(String classificacaoFilme) {
+        this.classificacaoFilme = classificacaoFilme;
     }
 
-    public void setSessao_filme(String sessao_filme) {
-        this.sessao_filme = sessao_filme;
+    public int getDuracaoFilme() {
+        return duracaoFilme;
     }
-    
-    
-    
+
+    public void setDuracaoFilme(int duracaoFilme) {
+        this.duracaoFilme = duracaoFilme;
+    }
+
+    public String getDataFilme() {
+        return dataFilme;
+    }
+
+    public void setDataFilme(String dataFilme) {
+        this.dataFilme = dataFilme;
+    }
+
+  
+
+ 
 }

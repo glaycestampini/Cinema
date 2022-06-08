@@ -1,5 +1,5 @@
 
-package Classes;
+package classes;
 
 public class Usuario {
     

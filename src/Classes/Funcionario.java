@@ -1,5 +1,5 @@
 
-package Classes;
+package classes;
 
 
 public class Funcionario  extends Usuario{
@@ -8,6 +8,7 @@ public class Funcionario  extends Usuario{
     //ATRIBUTO 
     private String telefone;
     private String endereço;
+    private String ordemExibicao;
 
     //CONSTRUTOR 
 
@@ -31,6 +32,14 @@ public class Funcionario  extends Usuario{
 
     public void setEndereço(String endereço) {
         this.endereço = endereço;
+    }
+
+    public String getOrdemExibicao() {
+        return ordemExibicao;
+    }
+
+    public void setOrdemExibicao(String ordemExibicao) {
+        this.ordemExibicao = ordemExibicao;
     }
     
     
