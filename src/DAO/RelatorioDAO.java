@@ -4,10 +4,6 @@
  */
 package DAO;
 
-/**
- *
- * @author PC
- */
 
 import classes.Relatorio;
 import java.sql.Connection;
@@ -20,71 +16,70 @@ import javax.swing.JOptionPane;
 
 
 public class RelatorioDAO {
-    
-    ConectarDAO objConectarDAO = new ConectarDAO();
-    Connection conectar = objConectarDAO.ConectarBD();
 
-    PreparedStatement preparo = null;
-    ResultSet rst = null;
-   
     
      public ArrayList<Relatorio>  gerarRelatorio(Relatorio datas) {
         
-        ArrayList<Relatorio> listaRelatorio = new ArrayList<>();
-        ResultSet gerarRelatorio;
-        
-        
+         ArrayList<Relatorio> listaRelatorio = new ArrayList<>();
+         Connection conn = ConectarDAO.ConectarBD();
+
+         ResultSet rs;
+         PreparedStatement pstm;
+
         try {
             String sql = "select data_venda, nome_filme, sala_filme, sessao_filme, ingresso, preço, total from venda " 
                     + "where data_venda between ? and ? "
                     + "order by data_venda";
-            preparo = conectar.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql);
             
-            preparo.setString(1, datas.getDataInicio());
-            preparo.setString(2, datas.getDataFim());
+            pstm.setString(1, datas.getDataInicio());
+            pstm.setString(2, datas.getDataFim());
             
-            gerarRelatorio = preparo.executeQuery();
+            rs = pstm.executeQuery();
             
 
-            while (gerarRelatorio.next()) {
+            while (rs.next()) {
                 Relatorio objRelatorio = new Relatorio();
-                String novaData = new SimpleDateFormat("dd/MM/yyyy").format(gerarRelatorio.getDate("data_venda"));
+                String novaData = new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("data_venda"));
                 objRelatorio.setData(novaData);
-                objRelatorio.setNome(gerarRelatorio.getString("nome_filme"));
-                objRelatorio.setSala(gerarRelatorio.getString("sala_filme"));
-                objRelatorio.setSessao(gerarRelatorio.getString("sessao_filme"));
-                objRelatorio.setQuantidade(gerarRelatorio.getInt("ingresso"));
-                objRelatorio.setPreco(gerarRelatorio.getDouble("preço"));
-                objRelatorio.setTotal(gerarRelatorio.getDouble("total"));
+                objRelatorio.setNome(rs.getString("nome_filme"));
+                objRelatorio.setSala(rs.getString("sala_filme"));
+                objRelatorio.setSessao(rs.getString("sessao_filme"));
+                objRelatorio.setQuantidade(rs.getInt("ingresso"));
+                objRelatorio.setPreco(rs.getDouble("preço"));
+                objRelatorio.setTotal(rs.getDouble("total"));
 
                 listaRelatorio.add(objRelatorio);
                 
             }
-            
-            
+            ConectarDAO.closeConnection(conn,pstm);
+            return listaRelatorio;
+
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe RelatorioDAO. pacote DAO. Metodo gerarRelatorio " + erro);
-            return null;
         }
-        
-        return listaRelatorio;
-
+        return null;
     }
      
      public int gerarIngressos(Relatorio datas){
+
+         Connection conn = ConectarDAO.ConectarBD();
+
+         ResultSet rs;
+         PreparedStatement pstm;
         
         int totIngressos = 0;
         ResultSet gerarRelatorioGeral;
         
         try {
             String sql = "select sum(ingresso) as qtdtotal from venda where data_venda between ? and ?";
-            preparo = conectar.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql);
             
-            preparo.setString(1, datas.getDataInicio());
-            preparo.setString(2, datas.getDataFim());
+            pstm.setString(1, datas.getDataInicio());
+            pstm.setString(2, datas.getDataFim());
             
-            gerarRelatorioGeral = preparo.executeQuery();
+            gerarRelatorioGeral = pstm.executeQuery();
             
             
             while (gerarRelatorioGeral.next()) {
@@ -92,39 +87,40 @@ public class RelatorioDAO {
                 totIngressos = gerarRelatorioGeral.getInt("qtdtotal");
                 
             }
-            
+        ConectarDAO.closeConnection(conn,pstm);
         return totIngressos;
             
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe RelatorioDAO. pacote DAO. Metodo gerarIngressos " + erro);
-            return 0;
         }
-        
+         return 0;
     }
      
      
      public int gerarQtdFilmes(Relatorio datas){
         
-        int totalFilmes = 0;
-        ResultSet gerarRelatorioGeral;
+         int totalFilmes = 0;
+         Connection conn = ConectarDAO.ConectarBD();
+
+         ResultSet rs;
+         PreparedStatement pstm;
         
         try {
             String sql = "select count(distinct nome_filme) as qtdtotal from venda " +
                         "where data_venda between ? and ?";
-            preparo = conectar.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql);
             
-            preparo.setString(1, datas.getDataInicio());
-            preparo.setString(2, datas.getDataFim());
+            pstm.setString(1, datas.getDataInicio());
+            pstm.setString(2, datas.getDataFim());
             
-            gerarRelatorioGeral = preparo.executeQuery();
-            
-            
-            while (gerarRelatorioGeral.next()) {
+            rs = pstm.executeQuery();
 
-                totalFilmes = gerarRelatorioGeral.getInt("qtdtotal");
+            while (rs.next()) {
+
+                totalFilmes = rs.getInt("qtdtotal");
                 
             }
-            
+        ConectarDAO.closeConnection(conn,pstm);
         return totalFilmes;
             
         } catch (SQLException erro) {
@@ -136,25 +132,27 @@ public class RelatorioDAO {
      public int gerarSessoes(Relatorio datas){
         
         int totalSessoes = 0;
-        ResultSet gerarRelatorioGeral;
+        ResultSet resultSet;
+        Connection conn = ConectarDAO.ConectarBD();
+        PreparedStatement pstm;
         
         try {
             String sql = "select count(distinct sessao_filme, nome_filme) as qtdtotal from venda " 
                     + "where data_venda between ? and ?";
-            preparo = conectar.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql);
             
-            preparo.setString(1, datas.getDataInicio());
-            preparo.setString(2, datas.getDataFim());
+            pstm.setString(1, datas.getDataInicio());
+            pstm.setString(2, datas.getDataFim());
             
-            gerarRelatorioGeral = preparo.executeQuery();
+            resultSet = pstm.executeQuery();
             
             
-            while (gerarRelatorioGeral.next()) {
+            while (resultSet.next()) {
 
-                totalSessoes = gerarRelatorioGeral.getInt("qtdtotal");
+                totalSessoes = resultSet.getInt("qtdtotal");
                 
             }
-            
+        ConectarDAO.closeConnection(conn,pstm);
         return totalSessoes;
             
         } catch (SQLException erro) {
@@ -165,32 +163,32 @@ public class RelatorioDAO {
     }     
      public double gerarReceita(Relatorio datas){
         
-        double valorTotal = 0;
-        ResultSet gerarRelatorioGeral;
+         double valorTotal = 0;
+         ResultSet rs;
+         Connection conn = ConectarDAO.ConectarBD();
+         PreparedStatement pstm;
         
         try {
             String sql = "select sum(total) as receita from venda where data_venda between ? and ?";
-            preparo = conectar.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql);
             
-            preparo.setString(1, datas.getDataInicio());
-            preparo.setString(2, datas.getDataFim());
+            pstm.setString(1, datas.getDataInicio());
+            pstm.setString(2, datas.getDataFim());
             
-            gerarRelatorioGeral = preparo.executeQuery();
+            rs = pstm.executeQuery();
             
             
-            while (gerarRelatorioGeral.next()) {
+            while (rs.next()) {
 
-                valorTotal = gerarRelatorioGeral.getDouble("receita");
+                valorTotal = rs.getDouble("receita");
                                 
             }
-            
-        return valorTotal;
+            ConectarDAO.closeConnection(conn,pstm);
+            return valorTotal;
             
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe RelatorioDAO. pacote DAO. Metodo gerarReceita " + erro);
-            return 0;
         }
-        
+        return 0;
     }
-    
 }

@@ -16,7 +16,6 @@ public class DataHorarioDAO {
     public static DataHorario selecionarDataHorarioPeloId(int id) {
 
         Connection conn = ConectarDAO.ConectarBD();
-        List<DataHorario> dataHorarioList = new ArrayList<>();
 
         ResultSet rs;
         PreparedStatement pstm;

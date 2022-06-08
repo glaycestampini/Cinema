@@ -407,7 +407,7 @@ public void gerarRelatorio(){
             DefaultTableModel tabelaModel = (DefaultTableModel) tbRelatorio.getModel();
             tabelaModel.setNumRows(0);
             
-            ArrayList<Relatorio> listaRelatorio = objRelatorio.gerarRelatorio(datas);
+           ArrayList<Relatorio> listaRelatorio = objRelatorio.gerarRelatorio(datas);
             
             for (int num = 0; num < listaRelatorio.size(); num++) {
                 tabelaModel.addRow(new Object[]{
@@ -447,7 +447,7 @@ public void gerarRelatorio(){
         
         txtareaTotal.setText("Total de filmes em cartaz: " + totalFilmes + "\nTotal de ingressos vendidos: "
                             + totalIngressos+ "\nTotal de sessões: " + totalSessoes + "\nReceita: " + valorTotal );
-        
+
         
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Erro no botao gerar relatorio" + erro);

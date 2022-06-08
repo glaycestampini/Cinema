@@ -27,7 +27,7 @@ public class UsuarioDAO {
             while(rs.next()) {
                 
             }   
-            return rst;
+            return rs;
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe UsuarioDAO. Pacote DAO. Metodo de autorizarUsuario " + erro);

@@ -1,25 +1,21 @@
 package classes;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Date;
 
-/**
- *
- * @author GLAYC
- */
 public class DataHorario {
 
-private int idDataHorario;
-private Date data;
-private String horario;
+    private int idDataHorario;
+    private String horario;
+    private Date data;
 
     public DataHorario() {
     }
 
-    public DataHorario(int idDataHorario, Date data, String horario) {
-        this.idDataHorario = idDataHorario;
-        this.data = data;
+    public DataHorario(int id_dataHorario, Date data, String horario) {
+        this.idDataHorario = id_dataHorario;
         this.horario = horario;
+        this.data = data;
     }
 
     public int getIdDataHorario() {
@@ -30,19 +26,19 @@ private String horario;
         this.idDataHorario = idDataHorario;
     }
 
-    public Date getData() {
-        return data;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
     public String getHorario() {
         return horario;
     }
 
     public void setHorario(String horario) {
         this.horario = horario;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 }

@@ -1,23 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package classes;
 
-/**
- *
- * @author GLAYC
- */
 public class Assento {
 
     private int idAssento;
     private boolean ocupado;
-    private Sala sala; 
+    private Sala sala;
 
     public Assento(int idAssento, boolean ocupado, Sala sala) {
         this.idAssento = idAssento;
         this.ocupado = ocupado;
         this.sala = sala;
+    }
+
+    public Assento() {
     }
 
     public Assento(int id_assento) {
@@ -46,6 +41,4 @@ public class Assento {
     public void setSala(Sala sala) {
         this.sala = sala;
     }
-
-   
 }

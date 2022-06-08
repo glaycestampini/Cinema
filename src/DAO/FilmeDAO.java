@@ -2,6 +2,9 @@
 package DAO;
 
 import classes.Filme;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -17,22 +20,22 @@ public class FilmeDAO extends UsuarioDAO{
 
    public void cadastrarFilme(Filme adcFILME) {
 
-       conectar = new ConectarDAO().ConectarBD();
+       Connection conn = ConectarDAO.ConectarBD();
+       ResultSet rs;
+       PreparedStatement pstm;
        try {
            String sqlFunc = "INSERT INTO FILME( nome_filme, categoria_filme , classificacao_filme, duracao, data_cadastro,valor_ingresso) "
                    + "VALUES (?, ?, ? ,? , ?, ?, ?)";
 
-           pstm = conectar.prepareStatement(sqlFunc);
+           pstm = conn.prepareStatement(sqlFunc);
            pstm.setString(1, adcFILME.getNomeFilme());
            pstm.setString(2, adcFILME.getCategoriaFilme());
            pstm.setString(3, adcFILME.getClassificacaoFilme());
            pstm.setInt(4, adcFILME.getDuracaoFilme());
-           pstm.setString(6, adcFILME.getDataFilme());
-           pstm.setDouble(7, adcFILME.getValorIngresso());
+           pstm.setString(5, adcFILME.getDataFilme());
+           pstm.setDouble(6, adcFILME.getValorIngresso());
 
-
-           pstm.execute();
-           pstm.close();
+           ConectarDAO.closeConnection(conn, pstm);
 
        } catch (SQLException erro) {
            JOptionPane.showMessageDialog(null, "Erro na classe FILMEDAO pacote DAO. Metodo adicionar FILME  " + erro);
@@ -43,10 +46,14 @@ public class FilmeDAO extends UsuarioDAO{
 
     public List<Filme> pesquisarFilme() {
 
+        Connection conn = ConectarDAO.ConectarBD();
+        ResultSet rs;
+        PreparedStatement pstm;
+
         try {
             String sql = "Select * from FILME order by data_cadastro";
-            pstm = conectar.prepareStatement(sql);
-            ResultSet rs = pstm.executeQuery();
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
 
             while (rs.next()) {
                 Filme filme = new Filme();
@@ -55,15 +62,18 @@ public class FilmeDAO extends UsuarioDAO{
                 filme.setCategoriaFilme(rs.getString("categoria_filme"));
                 filme.setClassificacaoFilme(rs.getString("classificacao_filme"));
                 filme.setDuracaoFilme(rs.getInt("duracao"));
-
+                filme.setDataFilme(rs.getString("data_cadastro"));
+                filme.setValorIngresso(rs.getDouble("valor_ingresso"));
+                ConectarDAO.closeConnection(conn, pstm);
 
                 String novaData = new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("data_cadastro"));
                 filme.setDataFilme(novaData);
 
                 listaFilme.add(filme);
 
-                return listaFilme;
             }
+            ConectarDAO.closeConnection(conn,pstm);
+            return listaFilme;
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe FILMEDAO.  pacote DAO. Metodo PESQUISAR" + erro);
@@ -75,13 +85,15 @@ public class FilmeDAO extends UsuarioDAO{
 
     public List<Filme> pesquisarFilmes() {
 
-    List<Filme> listFilme = new ArrayList<>();
+        List<Filme> listFilme = new ArrayList<>();
 
+        Connection conn = ConectarDAO.ConectarBD();
         ResultSet rs;
+        PreparedStatement pstm;
 
         try {
             String sql = "Select * from filme";
-            pstm = conectar.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql);
             rs = pstm.executeQuery();
 
             listFilme.add(new Filme(
@@ -94,7 +106,7 @@ public class FilmeDAO extends UsuarioDAO{
             rs.getDouble("valor_ingresso")
             ));
 
-            ConectarDAO.closeConnection(conectar, pstm);
+            ConectarDAO.closeConnection(conn, pstm);
 
             return listFilme;
 
@@ -108,29 +120,33 @@ public class FilmeDAO extends UsuarioDAO{
 
      public List<Filme> pesquisarFilmeAlfabetico() {
 
-        ResultSet pesquisarFilme;
+         ResultSet rs;
+         PreparedStatement pstm;
+         Connection conn = ConectarDAO.ConectarBD();
 
         try {
-            String sql = "Select * from FILME order by nome_filme";
-            pstm = conectar.prepareStatement(sql);
-            pesquisarFilme = pstm.executeQuery();
+            String sql = "select * from filme order by nome_filme";
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
 
-            while (pesquisarFilme.next()) {
+            while (rs.next()) {
                 Filme objFilme = new Filme();
-                objFilme.setIdFilme(pesquisarFilme.getInt("ID_FILME"));
-                objFilme.setNomeFilme(pesquisarFilme.getString("NOME_FILME"));
-                objFilme.setCategoriaFilme(pesquisarFilme.getString("CATEGORIA_FILME"));
-                objFilme.setClassificacaoFilme(pesquisarFilme.getString("CLASSIFICAÇAO_FILME"));
-                objFilme.setDuracaoFilme(pesquisarFilme.getInt("duracao"));
-                objFilme.setValorIngresso(pesquisarFilme.getDouble("valor_ingresso"));
+                objFilme.setIdFilme(rs.getInt("id_filme"));
+                objFilme.setNomeFilme(rs.getString("nome_filme"));
+                objFilme.setCategoriaFilme(rs.getString("categoria_filme"));
+                objFilme.setClassificacaoFilme(rs.getString("classificacao_filme"));
+                objFilme.setDuracaoFilme(rs.getInt("duracao"));
+                objFilme.setValorIngresso(rs.getDouble("valor_ingresso"));
+                objFilme.setDataFilme(rs.getString("data_cadastro"));
 
 
-                String novaData = new SimpleDateFormat("dd/MM/yyyy").format(pesquisarFilme.getDate("data_cadastro"));
+                String novaData = new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("data_cadastro"));
                 objFilme.setDataFilme(novaData);
 
                 listaFilme.add(objFilme);
 
             }
+            ConectarDAO.closeConnection(conn,pstm);
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe FILMEDAO.  pacote DAO. Metodo PESQUISAR" + erro);
@@ -142,27 +158,33 @@ public class FilmeDAO extends UsuarioDAO{
 
         public List<Filme> pesquisarFilmeAlfabeticoDesc() {
 
-        ResultSet pesquisarFilme;
+            ResultSet rs;
+            PreparedStatement pstm;
+            Connection conn = ConectarDAO.ConectarBD();
 
         try {
-            String sql = "Select * from FILME order by nome_filme desc";
-            pstm = conectar.prepareStatement(sql);
-            pesquisarFilme = pstm.executeQuery();
+            String sql = "Select * from filme order by nome_filme desc";
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
 
-            while (pesquisarFilme.next()) {
+            while (rs.next()) {
                 Filme objFilme = new Filme();
-                objFilme.setIdFilme(pesquisarFilme.getInt("ID_FILME"));
-                objFilme.setNomeFilme(pesquisarFilme.getString("NOME_FILME"));
-                objFilme.setCategoriaFilme(pesquisarFilme.getString("CATEGORIA_FILME"));
-                objFilme.setClassificacaoFilme(pesquisarFilme.getString("CLASSIFICAÇAO_FILME"));
-                objFilme.setDuracaoFilme(pesquisarFilme.getInt("duracao"));
+                objFilme.setIdFilme(rs.getInt("id_filme"));
+                objFilme.setNomeFilme(rs.getString("nome_filme"));
+                objFilme.setCategoriaFilme(rs.getString("categoria_filme"));
+                objFilme.setClassificacaoFilme(rs.getString("classificacao_filme"));
+                objFilme.setDuracaoFilme(rs.getInt("duracao"));
+                objFilme.setDataFilme(rs.getString("data_cadastro"));
+                objFilme.setValorIngresso(rs.getDouble("valor_ingresso"));
 
-                String novaData = new SimpleDateFormat("dd/MM/yyyy").format(pesquisarFilme.getDate("data_cadastro"));
+                String novaData = new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("data_cadastro"));
                 objFilme.setDataFilme(novaData);
                 
                 listaFilme.add(objFilme);
 
             }
+
+            ConectarDAO.closeConnection(conn,pstm);
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe FILMEDAO.  pacote DAO. Metodo PESQUISAR" + erro);
@@ -175,46 +197,42 @@ public class FilmeDAO extends UsuarioDAO{
     
     public void alterarFilme(Filme objFilme)
     {
-        conectar = new ConectarDAO().ConectarBD();
+        ResultSet rs;
+        PreparedStatement pstm;
+        Connection conn = ConectarDAO.ConectarBD();
         try {
-            String sqlFunc = "update FILME set NOME_FILME= ?, CATEGORIA_FILME=? , CLASSIFICAÇAO_FILME=?, duracao = ?, SALA_FILME=?, SESSAO_FILME=?, data_cadastro = ? where id_filme = ?";
+            String sqlFunc = "update filme set nome_filme= ?, categoria_filme=? , valor_ingresso=? ,classificacao_filme=?, duracao = ?, data_cadastro = ? where id_filme = ?";
 
-            pstm = conectar.prepareStatement(sqlFunc);
+            pstm = conn.prepareStatement(sqlFunc);
             pstm.setString(1, objFilme.getNomeFilme());
             pstm.setString(2, objFilme.getCategoriaFilme());
             pstm.setString(3, objFilme.getClassificacaoFilme());
             pstm.setInt(4, objFilme.getDuracaoFilme());
             pstm.setString(5, objFilme.getDataFilme());
             pstm.setInt(6, objFilme.getIdFilme());
+            pstm.setDouble( 7,objFilme.getValorIngresso());
 
-            
             pstm.execute();
-            pstm.close();
+            ConectarDAO.closeConnection(conn,pstm);
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe FILMEDAO pacote DAO. Metodo Alterar FILME  " + erro);
 
         }
-        
-        
-    
-    
-    
-    
-    
     }
     public void excluirFilme(Filme objFilme){
-    
-         conectar = ConectarDAO.ConectarBD();
+
+        ResultSet rs;
+        PreparedStatement pstm;
+        Connection conn = ConectarDAO.ConectarBD();
         try {
             String sqlFunc = "delete from FILME where id_filme = ?";
 
-            pstm = conectar.prepareStatement(sqlFunc);
+            pstm = conn.prepareStatement(sqlFunc);
             pstm.setInt(1, objFilme.getIdFilme());
 
-            
             pstm.execute();
-            pstm.close();
+            ConectarDAO.closeConnection(conn,pstm);
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro na classe FILMEDAO pacote DAO. Metodo Excluir FILME  " + erro);
